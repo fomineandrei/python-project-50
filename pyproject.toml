@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "hexlet-code"
+version = "0.1.0"
+description = "Hexlet education project"
+authors = ["fomineandrei"]
+readme = "README.md"
+repository = "https://github.com/fomineandrei/python-project-50" 
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Other Audience",
+  "Natural Language :: English",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Education",
+]
+packages = [
+  { include = "gendiff" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.gendiff:main"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.0.0"
+pytest = "^8.1.1"
+pytest-cov = "^5.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
