@@ -22,12 +22,11 @@ def generate_diff(file1_path, file2_path):
     keys = set(file1.keys()) | set(file2.keys())
     diff_list = []
     for key in sorted(list(keys)):
-        if key in file1 and key in file2:
-            if file1[key] == file2[key]:
-                diff_list.append(f'  {key}: {file1[key]}')
-            else:
-                diff_list.append(f'- {key}: {file1[key]}')
-                diff_list.append(f'+ {key}: {file2[key]}')
+        if key in file1 and key in file2 and file1[key] == file2[key]:
+            diff_list.append(f'  {key}: {file1[key]}')
+        elif key in file1 and key in file2 and file1[key] != file2[key]:
+            diff_list.append(f'- {key}: {file1[key]}')
+            diff_list.append(f'+ {key}: {file2[key]}')
         elif key in file1 and key not in file2:
             diff_list.append(f'- {key}: {file1[key]}')
         elif key not in file1 and key in file2:
