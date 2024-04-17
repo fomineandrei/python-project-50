@@ -3,9 +3,10 @@
 
 import argparse
 import json
+from gendiff import interface
 
 
-def help_func():
+def parse_func():
     parser = argparse.ArgumentParser(
         prog="gendiff",
         description="Compares two configuration files and shows a difference.")
@@ -21,16 +22,11 @@ def generate_diff(file1_path, file2_path):
     file2 = json.load(open(file2_path))
     keys = set(file1.keys()) | set(file2.keys())
     diff_list = []
-    for key in sorted(list(keys)):
-        if key in file1 and key in file2 and file1[key] == file2[key]:
-            diff_list.append(f'  {key}: {file1[key]}')
-        elif key in file1 and key in file2 and file1[key] != file2[key]:
-            diff_list.append(f'- {key}: {file1[key]}')
-            diff_list.append(f'+ {key}: {file2[key]}')
-        elif key in file1 and key not in file2:
-            diff_list.append(f'- {key}: {file1[key]}')
-        elif key not in file1 and key in file2:
-            diff_list.append(f'+ {key}: {file2[key]}')
+    for key in sorted(keys):
+        diff_dict = interface.make_diff_dict(
+            file1, file2, key)
+        diff_key = interface.make_diff_key(file1, file2, key)
+        diff_list.append(diff_dict[diff_key])
     return diff_list
 
 
@@ -40,7 +36,9 @@ def output_func(diff_data):
 
 
 def main():
-    output_func(generate_diff(help_func().first_file, help_func().second_file))
+    output_func(generate_diff(
+        parse_func().first_file, parse_func().second_file)
+    )
 
 
 if __name__ == '__main__':
