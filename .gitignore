@@ -3,3 +3,5 @@ __pycache__/
 /dist/
 /demos/
 .pytest_cache/
+.coverage
+fixtures/
