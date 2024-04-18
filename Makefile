@@ -16,3 +16,10 @@ package-install: # Установка пакета из файла whl
 
 lint: # Запуск линтера на проверку директории gendiff
 	poetry run flake8 gendiff
+
+test: # Проверка тестов с помощью pytest
+	poetry run pytest
+
+coverage: # Проверка покрытия тестами
+	poetry run pytest --cov=gendiff
+
