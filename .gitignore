@@ -4,4 +4,3 @@ __pycache__/
 /demos/
 .pytest_cache/
 .coverage
-fixtures/
