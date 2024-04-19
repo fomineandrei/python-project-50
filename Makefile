@@ -21,5 +21,5 @@ test: # Проверка тестов с помощью pytest
 	poetry run pytest
 
 coverage: # Проверка покрытия тестами
-	poetry run pytest --cov
+	poetry run pytest --cov=gendiff --cov-report xml
 
