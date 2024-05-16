@@ -23,3 +23,8 @@ def make_diff_key(dict1, dict2, key):
         is_key_in(dict2, key),
         is_values_equal(dict1, dict2, key),
     )
+
+
+def file_formate_check(file_name):
+    key = file_name.split('.')[1]
+    return key
