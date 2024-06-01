@@ -19,9 +19,9 @@ def yaml_to_dict(file_path: str):
 
 
 FILES_FORMATES = {
-        'json': json_to_dict,
-        'yaml': yaml_to_dict,
-        }
+    'json': json_to_dict,
+    'yaml': yaml_to_dict,
+}
 
 
 def file_to_dict(file_path: str):
@@ -29,4 +29,3 @@ def file_to_dict(file_path: str):
     print(file_formate)
     file_dict = FILES_FORMATES[file_formate](file_path)
     return file_dict
-
