@@ -1,20 +1,26 @@
-import gendiff.interface as interface
-import gendiff as gd
+from gendiff.files_formates import file_to_dict
+from gendiff.cli import parse_func
+from gendiff.output_formates import OUTPUT_FORMATES
 
 
-def generate_diff(file1_dict, file2_dict):
-    keys = set(file1_dict.keys()) | set(file2_dict.keys())
-    diff_list = []
-    for key in sorted(keys):
-        diff_dict = interface.make_diff_dict(
-            file1_dict, file2_dict, key)
-        diff_key = interface.make_diff_key(file1_dict, file2_dict, key)
-        diff_list.append(diff_dict[diff_key])
-    return "{\n  " + '\n  '.join(diff_list) + "\n}"
+def flatten(items):
+    plane_items = []
+    for item in items:
+        if not isinstance(item, list):
+            plane_items.append(item)
+        else:
+            plane_items.extend(item)
+    return plane_items
+
+
+def generate_diff(file1, file2, formate='stylish'):
+    output_formate_func = OUTPUT_FORMATES[formate]
+    dict1 = file_to_dict(file1)
+    dict2 = file_to_dict(file2)
+    return output_formate_func(dict1, dict2)
 
 
 def output_func():
-    print(gd.generate_diff(
-        gd.file_to_dict(gd.parse_func().first_file),
-        gd.file_to_dict(gd.parse_func().second_file))
-    )
+    args = parse_func()
+    formate = args.FORMAT if args.FORMAT in OUTPUT_FORMATES else {}
+    print(generate_diff(args.first_file, args.second_file, **formate))
