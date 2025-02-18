@@ -3,7 +3,7 @@ from gendiff.cli import parse_func
 from gendiff.files_formates import json_to_dict, yaml_to_dict
 
 
-def test_generate_diff_plane():
+def test_generate_diff_simple():
     assert generate_diff('tests/fixtures/file1.json', 'tests/fixtures/file2.json') == '\n'.join([
         '{',
         '  - follow: false', '    host: hexlet.io', '  - proxy: 123.234.53.22',
