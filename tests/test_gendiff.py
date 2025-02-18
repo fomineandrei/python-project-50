@@ -3,11 +3,14 @@ from gendiff.cli import parse_func
 from gendiff.files_formates import json_to_dict, yaml_to_dict
 
 
-def test_generate_diff_():
-    json_file_to_dict = json_to_dict('tests/fixtures/file1.json')
-    yaml_file_to_dict = yaml_to_dict('tests/fixtures/file2.yaml')
-    assert generate_diff(json_file_to_dict, yaml_file_to_dict) == '\n'.join([
+def test_generate_diff_plane():
+    assert generate_diff('tests/fixtures/file1.json', 'tests/fixtures/file2.json') == '\n'.join([
         '{',
-        '  - follow: False', '    host: hexlet.io', '  - proxy: 123.234.53.22',
-        '  - timeout: 50\n  + timeout: 20', '  + verbose: True', '}',
+        '  - follow: false', '    host: hexlet.io', '  - proxy: 123.234.53.22',
+        '  - timeout: 50\n  + timeout: 20', '  + verbose: true', '}',
         ])
+
+
+def test_generate_diff_stylish():
+    with open('tests/fixtures/diff_stylish.txt', 'r') as f:
+        assert generate_diff('tests/fixtures/file3.json', 'tests/fixtures/file4.yaml') == f.read()
