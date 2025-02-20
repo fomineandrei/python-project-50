@@ -8,10 +8,10 @@ def is_values_equal(data1, data2):
 
 def make_diff_dict(data1, data2, key):
     return {
-        (True, True, True): {'equal': [key, data1, None]},
-        (True, True, False): {'update': [key, data1, data2]},
-        (True, False, False): {'deleted': [key, data1, None]},
-        (False, True, False): {'added': [key, None, data2]},
+        (True, True, True): 'equal',
+        (True, True, False): 'update',
+        (True, False, False): 'deleted',
+        (False, True, False): 'added',
     }
 
 
