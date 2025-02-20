@@ -22,5 +22,5 @@ def generate_diff(file1, file2, formate='stylish'):
 
 def output_func():
     args = parse_func()
-    formate = args.FORMAT if args.FORMAT in OUTPUT_FORMATES else {}
+    formate = {'formate': args.FORMAT} if args.FORMAT in OUTPUT_FORMATES else {}
     print(generate_diff(args.first_file, args.second_file, **formate))

@@ -3,21 +3,28 @@ def is_all_not_dict(*args):
     return not all(is_dicts)
 
 
-def recursive_decorator(decor_func):
+def get_keys(*args):
+    keys_set = set()
+    for arg in args:
+        keys_set = keys_set | set(arg.keys())
+    keys = list(keys_set)
+    keys.sort()
+    return keys
+
+
+def recursive_decorator(decor_func, depth_func):
     def inner(func):
-        def wrapper(*args, key=None, depth=0):
+        default = depth_func()
+
+        def wrapper(*args, key=None, depth=default):
             if is_all_not_dict(*args):
                 return func(*args, key, depth)
-            keys_set = set()
-            for arg in args:
-                keys_set = keys_set | set(arg.keys())
-            keys = list(keys_set)
-            keys.sort()
+            keys = get_keys(*args)
             result = list(map(
                 lambda key: wrapper(
                     *[arg.get(key) for arg in args],
                     key=key,
-                    depth=depth + 1),
+                    depth=depth_func(key=key, depth=depth)),
                 keys
             ))
             return decor_func(result, key, depth)
