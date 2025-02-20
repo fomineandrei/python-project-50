@@ -8,3 +8,5 @@
 [![asciicast](https://asciinema.org/a/t8EY55tP5dXJL3XenNDsoK9bE.svg)](https://asciinema.org/a/t8EY55tP5dXJL3XenNDsoK9bE)
 ### How to use package gendiff with 'stylish' formate you can see in this demo: 
 [![asciicast](https://asciinema.org/a/k6rZIzIQogFkdWNuwzyj6Itmd.svg)](https://asciinema.org/a/k6rZIzIQogFkdWNuwzyj6Itmd)
+### How to use package gendiff with 'stylish' formate you can see in this demo:
+[![asciicast](https://asciinema.org/a/Yuy0riMoEHuhg7Z26OECMgpQH.svg)](https://asciinema.org/a/Yuy0riMoEHuhg7Z26OECMgpQH)
