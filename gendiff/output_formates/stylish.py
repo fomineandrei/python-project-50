@@ -1,44 +1,64 @@
-from gendiff.interface import make_diff
-from gendiff.output_formates.recursive_decorator import recursive_decorator
+from gendiff.diff_types import make_diff
+from gendiff.output_formates.functions import (
+    recursive_decorator,
+    python_to_json_decoder
+)
 
 
-def is_any_dict(*args):
-    is_dicts = [isinstance(arg, dict) for arg in args]
-    return any(is_dicts)
+def depth_default_stylish():
+    return 0
 
 
-def stylish_decor(func, key, depth):
-    indent = ' ' * depth * 4
-    if key is None:
-        return '{\n' + '\n'.join(func) + f'\n{indent}' + '}'
-    return f'{indent}{key}: ' + '{\n' + \
-        '\n'.join(func) + f'\n{indent}' + '}'
-
-
-def depth_func_stylish(key=None, depth=0):
-    if key is None:
-        return 0
+def depth_func_stylish(depth, key):
     return depth + 1
 
 
-@recursive_decorator(stylish_decor, depth_func_stylish)
-def stylish_dict(node, key=None, depth=0):
+def diff_decor_stylish(*args, key, depth, recursive_func):
     indent = 4 * ' ' * depth
-    return f'{indent}{key}: {node}'
+    return f'{indent}{key}: ' + \
+        recursive_func(*[arg.get(key) for arg in args], depth=depth)
 
 
-@recursive_decorator(stylish_decor, depth_func_stylish)
-def stylish(node1, node2, key, depth):
-    diff_key = make_diff(node1, node2, key)
-    args = [node1, node2]
-    for index in range(0, len(args)):
-        if isinstance(args[index], dict):
-            args[index] = stylish_dict(args[index], depth=depth)
+def result_decor(result, depth):
+    indent = 4 * ' ' * depth
+    return '{\n' + '\n'.join(result) + f'\n{indent}' + '}'
+
+
+PROCESSING_FUNCS = [
+    depth_default_stylish,
+    depth_func_stylish,
+    diff_decor_stylish,
+    result_decor
+]
+
+
+@recursive_decorator(*PROCESSING_FUNCS)
+def stylish_dict(value: dict, key, depth):
+    json_value = python_to_json_decoder(value.get(key))
+    indent = 4 * ' ' * depth
+    return f'{indent}{key}: {json_value}'
+
+
+def python_to_stylish(*args, depth=None):
+    return [
+        stylish_dict(arg, depth=depth) if isinstance(arg, dict)
+        else python_to_json_decoder(arg)
+        for arg in args
+    ]
+
+
+@recursive_decorator(*PROCESSING_FUNCS)
+def stylish(dict1, dict2, key=None, depth=None):
+    diff_key = make_diff(dict1, dict2, key)
+    stylish_vals = python_to_stylish(
+        dict1.get(key), dict2.get(key), depth=depth
+    )
     indent = ' ' * (depth * 4 - 2)
     diff_dict = {
-        'equal': f'{indent}  {key}: {args[0]}',
-        'update': f'{indent}- {key}: {args[0]}\n{indent}+ {key}: {args[1]}',
-        'deleted': f'{indent}- {key}: {args[0]}',
-        'added': f'{indent}+ {key}: {args[1]}'
+        'equal': f'{indent}  {key}: {stylish_vals[0]}',
+        'update': f'{indent}- {key}: {stylish_vals[0]}'
+        f'\n{indent}+ {key}: {stylish_vals[1]}',
+        'deleted': f'{indent}- {key}: {stylish_vals[0]}',
+        'added': f'{indent}+ {key}: {stylish_vals[1]}'
     }
     return diff_dict[diff_key]
