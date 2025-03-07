@@ -19,3 +19,8 @@ def test_generate_diff_stylish():
 def test_generate_diff_plane():
     with open('tests/fixtures/diff_plane.txt', 'r') as f:
         assert generate_diff('tests/fixtures/file3.json', 'tests/fixtures/file4.yaml', formate='plane') == f.read()
+
+
+def test_generate_diff_json():
+    with open('tests/fixtures/diff_json.txt', 'r') as f:
+        assert generate_diff('tests/fixtures/file3.json', 'tests/fixtures/file4.yaml', formate='json') == f.read()
