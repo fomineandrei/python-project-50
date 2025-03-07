@@ -2,6 +2,8 @@ import argparse
 from gendiff.output_formates import OUTPUT_FORMATES
 
 
+# Функция, которая парсит ввод из командной строки
+# Парсит два адреса файлов и формат вывода(необязателен)
 def parse_func():
     parser = argparse.ArgumentParser(
         prog="gendiff",

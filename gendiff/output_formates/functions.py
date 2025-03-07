@@ -1,3 +1,4 @@
+# Словарь преобразования значений из Python в JSON
 PYTHON_TO_JSON = {
     None: "null",
     True: "true",
@@ -5,10 +6,13 @@ PYTHON_TO_JSON = {
 }
 
 
+# Функция преобразует значение из Python в JSON
+# в случае отсутствия отличий возвращает само значение
 def python_to_json_decoder(value):
     return PYTHON_TO_JSON.get(value, value)
 
 
+# Вложенные списки преобразует в значения списков
 def flatten(items):
     plane_items = []
     for item in items:
@@ -19,12 +23,14 @@ def flatten(items):
     return plane_items
 
 
+# Проверяет, нужно ли формировать конечный дифф для ключа
 def is_diff(*args, key=None):
     is_in_dict = [key in arg for arg in args]
     is_dict = [isinstance(arg.get(key), dict) for arg in args]
     return not all(is_dict + is_in_dict)
 
 
+# Формирует сортированный список ключей двух словарей
 def get_keys(*args):
     keys_set = set()
     for arg in args:
@@ -34,6 +40,9 @@ def get_keys(*args):
     return keys
 
 
+# Декоратор, рекурсивно проверяет словари на различия по ключам
+# оборачивает функцию диффа конечного элемента
+# принимает четыре обязательные функции-обработчика для каждого формата
 def recursive_decorator(depth_default, depth_func, diff_decor, result_decor):
     def inner(func):
         default = depth_default()
