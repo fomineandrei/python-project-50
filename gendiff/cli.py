@@ -1,4 +1,5 @@
 import argparse
+from gendiff.output_formates import OUTPUT_FORMATES
 
 
 def parse_func():
@@ -8,6 +9,7 @@ def parse_func():
     parser.add_argument("first_file")
     parser.add_argument("second_file")
     parser.add_argument("-f", "--format",
-                        dest="FORMAT", help='set format of output')
+                        dest="FORMAT", help='set format of output',
+                        choices=OUTPUT_FORMATES.keys())
     args = parser.parse_args()
     return args
