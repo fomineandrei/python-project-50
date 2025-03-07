@@ -9,7 +9,9 @@ PYTHON_TO_JSON = {
 # Функция преобразует значение из Python в JSON
 # в случае отсутствия отличий возвращает само значение
 def python_to_json_decoder(value):
-    return PYTHON_TO_JSON.get(value, value)
+    if isinstance(value, bool | None):
+        return PYTHON_TO_JSON.get(value)
+    return value
 
 
 # Вложенные списки преобразует в значения списков
