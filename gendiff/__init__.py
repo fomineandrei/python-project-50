@@ -3,7 +3,7 @@ from gendiff.cli import parse_func
 from gendiff.files_formates import file_to_dict
 from gendiff.output_formates import (
     stylish,
-    plane,
+    plain,
     json
 )
 
@@ -13,6 +13,6 @@ __all__ = (
     'parse_func',
     'file_to_dict',
     'stylish',
-    'plane',
+    'plain',
     'json'
 )
