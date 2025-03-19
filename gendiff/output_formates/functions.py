@@ -1,4 +1,3 @@
-# Словарь преобразования значений из Python в JSON
 PYTHON_TO_JSON = {
     None: "null",
     True: "true",
@@ -6,15 +5,12 @@ PYTHON_TO_JSON = {
 }
 
 
-# Функция преобразует значение из Python в JSON
-# в случае отсутствия отличий возвращает само значение
 def python_to_json_decoder(value):
     if isinstance(value, bool | None):
         return PYTHON_TO_JSON.get(value)
     return value
 
 
-# Вложенные списки преобразует в значения списков
 def flatten(items):
     plane_items = []
     for item in items:
@@ -25,7 +21,6 @@ def flatten(items):
     return plane_items
 
 
-# Проверяет, нужно ли формировать конечный дифф для ключа
 def is_diff(*args, key=None):
     is_in_dict = [key in arg for arg in args]
     is_dict = [isinstance(arg.get(key), dict) for arg in args]
