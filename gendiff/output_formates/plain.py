@@ -6,38 +6,30 @@ from gendiff.output_formates.functions import (
 from gendiff.diff_types import make_diff
 
 
-# =================Функции обработчики=======================
-# Глубина по умолчанию
 def depth_default_plain():
     return ''
 
 
-# Расчет глубины следующего шага
 def depth_func_plain(depth=None, key=None):
     return f'{depth}.{key}'.lstrip('.')
 
 
-# оборачивает дифф для ключа при неконечном узле
 def diff_decor_plain(*args, key, depth, recursive_func):
     return recursive_func(*[arg.get(key) for arg in args], depth=depth)
 
 
-# Формирует дифф для ключей двух словарей
 def result_decor(result, depth):
     return '\n'.join(flatten([arg for arg in result if arg is not None]))
 
 
-# Список функций обработчиков для передачи в декоратор
 PROCESSING_FUNCS = [
     depth_default_plain,
     depth_func_plain,
     diff_decor_plain,
     result_decor
 ]
-# ===========================================================
 
 
-# Переводит значения из формата Python в формат plane
 def python_to_plain(*args):
     plain_values = []
     for arg in args:
@@ -50,7 +42,6 @@ def python_to_plain(*args):
     return [python_to_json_decoder(val) for val in plain_values]
 
 
-# Формирует дифф в формате plane
 @recursive_decorator(*PROCESSING_FUNCS)
 def plain(node1, node2, key=None, depth=''):
     diff_key = make_diff(node1, node2, key)

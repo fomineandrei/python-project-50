@@ -5,31 +5,25 @@ from gendiff.output_formates.functions import (
 )
 
 
-# ==================Функции обработчики========================
-# Глубина по умолчанию
 def depth_default_stylish():
     return 0
 
 
-# Расчет глубины следующего шага
 def depth_func_stylish(depth, key):
     return depth + 1
 
 
-# Обрабатывает дифф для ключа неконечного узла
 def diff_decor_stylish(*args, key, depth, recursive_func):
     indent = 4 * ' ' * depth
     return f'{indent}{key}: ' + \
         recursive_func(*[arg.get(key) for arg in args], depth=depth)
 
 
-# Обрабатывает дифф для ключей двух словарей
 def result_decor(result, depth):
     indent = 4 * ' ' * depth
     return '{\n' + '\n'.join(result) + f'\n{indent}' + '}'
 
 
-# Список функций обработчиков для передачи в декоратор
 PROCESSING_FUNCS = [
     depth_default_stylish,
     depth_func_stylish,
@@ -38,7 +32,6 @@ PROCESSING_FUNCS = [
 ]
 
 
-# Преобразует словарь в формат stylish
 @recursive_decorator(*PROCESSING_FUNCS)
 def stylish_dict(value: dict, key, depth):
     json_value = python_to_json_decoder(value.get(key))
@@ -46,7 +39,6 @@ def stylish_dict(value: dict, key, depth):
     return f'{indent}{key}: {json_value}'
 
 
-# Преобразует значения Python в формат stylish
 def python_to_stylish(*args, depth=None):
     return [
         stylish_dict(arg, depth=depth) if isinstance(arg, dict)
@@ -55,7 +47,6 @@ def python_to_stylish(*args, depth=None):
     ]
 
 
-# Формирует дифф в формате stylish
 @recursive_decorator(*PROCESSING_FUNCS)
 def stylish(dict1, dict2, key=None, depth=None):
     diff_key = make_diff(dict1, dict2, key)

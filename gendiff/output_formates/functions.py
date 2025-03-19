@@ -32,7 +32,6 @@ def is_diff(*args, key=None):
     return not all(is_dict + is_in_dict)
 
 
-# Формирует сортированный список ключей двух словарей
 def get_keys(*args):
     keys_set = set()
     for arg in args:
@@ -42,9 +41,6 @@ def get_keys(*args):
     return keys
 
 
-# Декоратор, рекурсивно проверяет словари на различия по ключам
-# оборачивает функцию диффа конечного элемента
-# принимает четыре обязательные функции-обработчика для каждого формата
 def recursive_decorator(depth_default, depth_func, diff_decor, result_decor):
     def inner(func):
         default = depth_default()
