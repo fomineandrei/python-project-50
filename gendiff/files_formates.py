@@ -23,6 +23,10 @@ FILES_FORMATES = {
 
 
 def file_to_dict(file_path: str) -> dict:
+    """
+    Read data from file and converts to Python dict type
+    Only JSON, YAML or YML formates
+    """
     file_formate = file_path.split('.')[1]
     file_dict = FILES_FORMATES[file_formate](file_path)
     return file_dict

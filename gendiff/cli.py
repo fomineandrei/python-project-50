@@ -3,6 +3,10 @@ from gendiff.output_formates import OUTPUT_FORMATES
 
 
 def parse_func():
+    """
+    Parse the entered command and return parsed arguments
+    as Namespace object
+    """
     parser = argparse.ArgumentParser(
         prog="gendiff",
         description="Compares two configuration files and shows a difference.")

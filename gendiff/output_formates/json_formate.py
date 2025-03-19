@@ -45,5 +45,9 @@ def json_formate(dict1, dict2, key=None, depth=None):
 
 
 def json(dict1, dict2):
+    """
+    Accepts two Python dicts and return diff between them
+    in json formate(string type)
+    """
     result = json_formate(dict1, dict2)
     return json_lib.dumps(result, indent=4)

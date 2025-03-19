@@ -49,6 +49,10 @@ def python_to_stylish(*args, depth=None):
 
 @recursive_decorator(*PROCESSING_FUNCS)
 def stylish(dict1, dict2, key=None, depth=None):
+    """
+    Accepts two Python dicts and return diff between them
+    in stylish formate(string type)
+    """
     diff_key = make_diff(dict1, dict2, key)
     stylish_vals = python_to_stylish(
         dict1.get(key), dict2.get(key), depth=depth

@@ -44,6 +44,10 @@ def python_to_plain(*args):
 
 @recursive_decorator(*PROCESSING_FUNCS)
 def plain(node1, node2, key=None, depth=''):
+    """
+    Accepts two Python dicts and return diff between them
+    in plain formate(string type)
+    """
     diff_key = make_diff(node1, node2, key)
     plain_values = python_to_plain(node1.get(key), node2.get(key))
     diff_dict = {
