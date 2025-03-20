@@ -4,7 +4,7 @@ from gendiff.output_formates import OUTPUT_FORMATES
 from gendiff.exceptions import OutputFormateError
 
 
-def generate_diff(file1_path, file2_path, formate='stylish'):
+def generate_diff(first_file, second_file, FORMAT='stylish'):
     """
     Generate diff between two JSON, YAML or YML files
 
@@ -14,17 +14,16 @@ def generate_diff(file1_path, file2_path, formate='stylish'):
 
     Return diff between two files in string type
     """
-    if formate not in OUTPUT_FORMATES:
+    if FORMAT not in OUTPUT_FORMATES:
         raise OutputFormateError(
-            f'"{formate}". Choose from {list(OUTPUT_FORMATES.keys())}'
+            f'"{FORMAT}". Choose from {list(OUTPUT_FORMATES.keys())}'
         )
-    output_formate_func = OUTPUT_FORMATES[formate]
-    dict1 = file_to_dict(file1_path)
-    dict2 = file_to_dict(file2_path)
+    output_formate_func = OUTPUT_FORMATES[FORMAT]
+    dict1 = file_to_dict(first_file)
+    dict2 = file_to_dict(second_file)
     return output_formate_func(dict1, dict2)
 
 
 def output_func():
-    args = parse_func()
-    formate = {'formate': args.FORMAT} if args.FORMAT else {}
-    print(generate_diff(args.first_file, args.second_file, **formate))
+    kwargs = vars(parse_func())
+    print(generate_diff(**kwargs))
