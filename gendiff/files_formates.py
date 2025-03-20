@@ -4,13 +4,15 @@ from yaml.loader import SafeLoader
 from gendiff.exceptions import FileFormateError
 
 
-def json_to_dict(file_path: str):
+def json_to_dict(file_path: str) -> dict:
+    """Read the json file and convers data to python dict"""
     with open(file_path, 'r') as f:
         json_dict = json.load(f)
     return json_dict
 
 
-def yaml_to_dict(file_path: str):
+def yaml_to_dict(file_path: str) -> dict:
+    """Read the yml or yaml file and convers data to python dict"""
     with open(file_path, 'r') as f:
         yaml_dict = yaml.load(f, Loader=SafeLoader)
     return yaml_dict

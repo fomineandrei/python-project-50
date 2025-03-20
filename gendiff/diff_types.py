@@ -1,4 +1,5 @@
-def make_diff(data1_dict, data2_dict, key):
+def make_diff(data1_dict: dict, data2_dict: dict, key) -> str:
+    """Define type of difference for key in two dicts"""
     key_in_data1 = key in data1_dict
     key_in_data2 = key in data2_dict
     is_equal = data1_dict.get(key) == data2_dict.get(key)

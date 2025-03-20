@@ -5,13 +5,15 @@ PYTHON_TO_JSON = {
 }
 
 
-def python_to_json_decoder(value):
+def python_to_json_decoder(value) -> str:
+    """Converts special Python values to json"""
     if isinstance(value, bool | None):
         return PYTHON_TO_JSON.get(value)
     return value
 
 
-def flatten(items):
+def flatten(items: list) -> list:
+    """Converts nested list to plain list"""
     plane_items = []
     for item in items:
         if not isinstance(item, list):
@@ -21,13 +23,15 @@ def flatten(items):
     return plane_items
 
 
-def is_diff(*args, key=None):
+def is_diff(*args, key=None) -> bool:
+    """Check args for differences: True or False"""
     is_in_dict = [key in arg for arg in args]
     is_dict = [isinstance(arg.get(key), dict) for arg in args]
     return not all(is_dict + is_in_dict)
 
 
-def get_keys(*args):
+def get_keys(*args: dict) -> list:
+    """Collects all keys of dicts in sorted list"""
     keys_set = set()
     for arg in args:
         keys_set = keys_set | set(arg.keys())
@@ -37,6 +41,12 @@ def get_keys(*args):
 
 
 def recursive_decorator(depth_default, depth_func, diff_decor, result_decor):
+    """
+    Decorator for diff functions
+    Accepts diff function and proccessing functions
+    Check every node of dicts for difference and generate diff
+    for them with diff function
+    """
     def inner(func):
         default = depth_default()
 

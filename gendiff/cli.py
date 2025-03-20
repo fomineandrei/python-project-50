@@ -2,7 +2,7 @@ import argparse
 from gendiff.output_formates import OUTPUT_FORMATES
 
 
-def parse_func():
+def parse_func() -> object:
     """
     Parse the entered command and return parsed arguments
     as Namespace object

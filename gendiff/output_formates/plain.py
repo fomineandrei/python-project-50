@@ -6,19 +6,23 @@ from gendiff.output_formates.functions import (
 from gendiff.diff_types import make_diff
 
 
-def depth_default_plain():
+def depth_default_plain() -> str:
+    """plain formate default depth for decorator"""
     return ''
 
 
-def depth_func_plain(depth=None, key=None):
+def depth_func_plain(depth=None, key=None) -> str:
+    """plain formate depth function for decorator"""
     return f'{depth}.{key}'.lstrip('.')
 
 
-def diff_decor_plain(*args, key, depth, recursive_func):
+def diff_decor_plain(*args, key, depth: str, recursive_func):
+    """plain formate decorate function for diff func"""
     return recursive_func(*[arg.get(key) for arg in args], depth=depth)
 
 
-def result_decor(result, depth):
+def result_decor(result: list, depth) -> str:
+    """plain formate decorate function for recursive decorator result"""
     return '\n'.join(flatten([arg for arg in result if arg is not None]))
 
 
@@ -30,7 +34,8 @@ PROCESSING_FUNCS = [
 ]
 
 
-def python_to_plain(*args):
+def python_to_plain(*args) -> list:
+    """Converts python values to special plain formate"""
     plain_values = []
     for arg in args:
         if isinstance(arg, str):
@@ -43,7 +48,7 @@ def python_to_plain(*args):
 
 
 @recursive_decorator(*PROCESSING_FUNCS)
-def plain(node1, node2, key=None, depth=''):
+def plain(node1: dict, node2: dict, key=None, depth='') -> str:
     """
     Accepts two Python dicts and return diff between them
     in plain formate(string type)

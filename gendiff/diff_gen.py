@@ -4,7 +4,9 @@ from gendiff.output_formates import OUTPUT_FORMATES
 from gendiff.exceptions import OutputFormateError
 
 
-def generate_diff(first_file, second_file, FORMAT='stylish'):
+def generate_diff(first_file: str,
+                  second_file: str,
+                  FORMAT: str = 'stylish') -> str:
     """
     Generate diff between two JSON, YAML or YML files
 
@@ -25,5 +27,6 @@ def generate_diff(first_file, second_file, FORMAT='stylish'):
 
 
 def output_func():
+    """Print difference for parsed arguments"""
     kwargs = vars(parse_func())
     print(generate_diff(**kwargs))
