@@ -1,4 +1,6 @@
 from gendiff.diff_gen import generate_diff
+import pytest
+from gendiff.exceptions import FileFormateError, OutputFormateError
 
 
 def test_generate_diff_simple():
@@ -28,3 +30,17 @@ def test_generate_diff_json():
         assert generate_diff('tests/fixtures/file3.json',
                              'tests/fixtures/file4.yaml',
                              formate='json') == f.read()
+
+
+def test_generate_diff_wrong_formate():
+    with pytest.raises(OutputFormateError):
+        generate_diff('tests/fixtures/file3.json',
+                             'tests/fixtures/file4.yaml',
+                             formate='my_formate')
+
+
+def test_generate_diff_wrong_file_formate():
+    with pytest.raises(FileFormateError):
+        generate_diff('tests/fixtures/file3.json',
+                             'tests/fixtures/file4.xml',
+                             formate='json')
