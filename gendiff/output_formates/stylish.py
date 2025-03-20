@@ -15,7 +15,7 @@ def depth_func_stylish(depth: int, key) -> int:
     return depth + 1
 
 
-def diff_decor_stylish(*args: dict, key, depth: int, recursive_func) -> str:
+def diff_decor_stylish(*args, key, depth: int, recursive_func) -> str:
     """stylish formate decorate function for diff func"""
     tab = 4 * ' '
     indent = tab * depth
