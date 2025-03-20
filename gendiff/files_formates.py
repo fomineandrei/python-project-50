@@ -1,6 +1,7 @@
 import json
 import yaml
 from yaml.loader import SafeLoader
+from gendiff.exceptions import FileFormateError
 
 
 def json_to_dict(file_path: str):
@@ -28,5 +29,9 @@ def file_to_dict(file_path: str) -> dict:
     Only JSON, YAML or YML formates
     """
     file_formate = file_path.split('.')[1]
+    if file_formate not in FILES_FORMATES:
+        raise FileFormateError(
+            f'"{file_formate}". Use only {list(FILES_FORMATES.keys())} files'
+        )
     file_dict = FILES_FORMATES[file_formate](file_path)
     return file_dict

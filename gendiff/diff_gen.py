@@ -28,6 +28,3 @@ def output_func():
     args = parse_func()
     formate = {'formate': args.FORMAT} if args.FORMAT else {}
     print(generate_diff(args.first_file, args.second_file, **formate))
-
-
-print(generate_diff('g', 'f', 'h'))
