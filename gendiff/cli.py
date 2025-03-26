@@ -13,7 +13,7 @@ def parse_func() -> object:
     parser.add_argument("first_file")
     parser.add_argument("second_file")
     parser.add_argument("-f", "--format",
-                        dest="FORMAT", help='set format of output',
+                        help='set format of output',
                         choices=OUTPUT_FORMATES.keys(),
                         default='stylish')
     args = parser.parse_args()
