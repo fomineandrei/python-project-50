@@ -3,7 +3,7 @@ from gendiff.output_formates.functions import (
     python_to_json_decoder,
     flatten
 )
-from gendiff.diff_types import make_diff
+from gendiff.node_diff import make_diff, NotFound
 
 
 def depth_default_plain() -> str:
@@ -53,13 +53,19 @@ def plain(node1: dict, node2: dict, key=None, depth='') -> str:
     Accepts two Python dicts and return diff between them
     in plain formate(string type)
     """
-    diff_key = make_diff(node1, node2, key)
-    plain_values = python_to_plain(node1.get(key), node2.get(key))
-    diff_dict = {
-        'equal': None,
-        'added': f"Property '{depth}' was added with value: {plain_values[1]}",
-        'deleted': f"Property '{depth}' was removed",
-        'update': f"Property '{depth}' was updated. "
-        f"From {plain_values[0]} to {plain_values[1]}"
-    }
-    return diff_dict[diff_key]
+    diff = make_diff(node1, node2, key)
+    plain_values = python_to_plain(*diff)
+    value1 = plain_values[0]
+    value2 = plain_values[1]
+    deleted = type(value2) is NotFound
+    if deleted:
+        return f"Property '{depth}' was removed"
+    added = type(value1) is NotFound
+    if added:
+        return f"Property '{depth}' was added with value: {value2}"
+    equal = value1 == value2
+    if equal:
+        return
+    update = value1 != value2
+    if update:
+        return f"Property '{depth}' was updated. From {value1} to {value2}"
