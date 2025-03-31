@@ -1,14 +1,14 @@
-PYTHON_TO_JSON = {
+PYTHON_JSON_SPECIALS = {
     None: "null",
     True: "true",
     False: "false"
 }
 
 
-def python_to_json_decoder(value) -> str:
+def for_specials_converter(value) -> str:
     """Converts special Python values to json"""
     if isinstance(value, bool | None):
-        return PYTHON_TO_JSON.get(value)
+        return PYTHON_JSON_SPECIALS.get(value)
     return value
 
 
@@ -38,35 +38,3 @@ def get_keys(*args) -> list:
     keys = list(keys_set)
     keys.sort()
     return keys
-
-
-def recursive_decorator(depth_default, depth_func, diff_decor, result_decor):
-    """
-    Decorator for diff functions
-    Accepts diff function and proccessing functions
-    Check every node of dicts for difference and generate diff
-    for them with diff function
-    """
-    def inner(func):
-        default = depth_default()
-
-        def wrapper(*args, depth=default):
-            keys = get_keys(*args)
-
-            def diff_func(*args, key, depth):
-                if is_diff(*args, key=key):
-                    return func(*args, key, depth)
-                return diff_decor(
-                    *args,
-                    key=key,
-                    depth=depth,
-                    recursive_func=wrapper)
-
-            result = list(map(lambda key: diff_func(
-                *args,
-                key=key,
-                depth=depth_func(depth, key)),
-                keys))
-            return result_decor(result, depth)
-        return wrapper
-    return inner
