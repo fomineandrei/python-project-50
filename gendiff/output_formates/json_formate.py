@@ -36,7 +36,7 @@ def json_diff(dict1: dict, dict2: dict, key=None, depth=None) -> dict:
 def json_recursive(*args):
     """
     Check for diff every nodes of two dictionaries and
-    generate difference between them in plain formate
+    generate difference between them in python dictionary formate
     """
     keys = get_keys(*args)
 
