@@ -22,25 +22,25 @@ def test_generate_diff_plane():
     with open('tests/fixtures/diff_plane.txt', 'r') as f:
         assert generate_diff('tests/fixtures/file3.json',
                              'tests/fixtures/file4.yaml',
-                             FORMAT='plain') == f.read()
+                             format='plain') == f.read()
 
 
 def test_generate_diff_json():
     with open('tests/fixtures/diff_json.txt', 'r') as f:
         assert generate_diff('tests/fixtures/file3.json',
                              'tests/fixtures/file4.yaml',
-                             FORMAT='json') == f.read()
+                             format='json') == f.read()
 
 
 def test_generate_diff_wrong_formate():
     with pytest.raises(OutputFormateError):
         generate_diff('tests/fixtures/file3.json',
                              'tests/fixtures/file4.yaml',
-                             FORMAT='my_formate')
+                             format='my_formate')
 
 
 def test_generate_diff_wrong_file_formate():
     with pytest.raises(FileFormateError):
         generate_diff('tests/fixtures/file3.json',
                              'tests/fixtures/file4.xml',
-                             FORMAT='json')
+                             format='json')
