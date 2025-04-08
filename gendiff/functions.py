@@ -23,13 +23,6 @@ def flatten(items: list) -> list:
     return plane_items
 
 
-def is_diff(*args, key=None) -> bool:
-    """Check args for differences: True or False"""
-    is_in_dict = [key in arg for arg in args]
-    is_dict = [isinstance(arg.get(key), dict) for arg in args]
-    return not all(is_dict + is_in_dict)
-
-
 def get_keys(*args) -> list:
     """Collects all keys of dicts in sorted list"""
     keys_set = set()
@@ -38,3 +31,14 @@ def get_keys(*args) -> list:
     keys = list(keys_set)
     keys.sort()
     return keys
+
+
+def make_dict(result: list) -> dict:
+    """
+    function for generate one dictionary from
+    list of dictionaries
+    """
+    result_dict = {}
+    for el in result:
+        result_dict.update(el)
+    return result_dict
