@@ -23,17 +23,18 @@ def node_diff(data1: dict, data2: dict, key) -> dict:
     if nested:
         return {key: {'diff': 'nested', 'result': make_diff(value1, value2)}}
     deleted = type(value2) is NotFound
-    if deleted:
-        return {key: {'diff': 'deleted', 'result': (value1, value2)}}
     added = type(value1) is NotFound
-    if added:
-        return {key: {'diff': 'added', 'result': (value1, value2)}}
     equal = value1 == value2
-    if equal:
-        return {key: {'diff': 'equal', 'result': (value1, value2)}}
     update = value1 != value2
-    if update:
-        return {key: {'diff': 'update', 'result': (value1, value2)}}
+    if deleted:
+        diff_type = 'deleted'
+    elif added:
+        diff_type = 'added'
+    elif equal:
+        diff_type = 'equal'
+    elif update:
+        diff_type = 'update'
+    return {key: {'diff': diff_type, 'result': (value1, value2)}}
 
 
 def make_diff(data1_dict: dict, data2_dict: dict) -> dict:
