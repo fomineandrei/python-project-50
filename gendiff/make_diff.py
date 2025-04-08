@@ -9,22 +9,19 @@ not_found = NotFound()
 
 
 def node_diff(data1: dict, data2: dict, key) -> dict:
-    """
-    Return diff of node(key)
-    formate of diff: {'diff': type, 'result': (val1, val2)}
-    For type='nested' 'result' value is diff.
-    Valid values for 'diff' key:
-    'deleted', 'added', 'equal', 'update' or 'nested'.
-    """
+    """Return diff of node in python dict formate"""
     value1 = data1.get(key, not_found)
     value2 = data2.get(key, not_found)
     nested = isinstance(value1, dict) and isinstance(value2, dict)
+
     if nested:
         return {key: {'diff': 'nested', 'result': make_diff(value1, value2)}}
+    
     deleted = type(value2) is NotFound
     added = type(value1) is NotFound
     equal = value1 == value2
     update = value1 != value2
+    
     if deleted:
         diff_type = 'deleted'
     elif added:
