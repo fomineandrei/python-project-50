@@ -34,17 +34,18 @@ def plain_diff(diff: dict, key, depth: list = []) -> str:
     depth_str = '.'.join(depth)
     plain_vals = python_to_plain(
         *diff_val)
-    value1 = plain_vals[0]
-    value2 = plain_vals[1]
+    val1 = plain_vals[0]
+    val2 = plain_vals[1]
 
     if diff_type == 'deleted':
-        return f"Property '{depth_str}' was removed"
-    if diff_type == 'added':
-        return f"Property '{depth_str}' was added with value: {value2}"
-    if diff_type == 'equal':
-        return
-    if diff_type == 'update':
-        return f"Property '{depth_str}' was updated. From {value1} to {value2}"
+        result = f"Property '{depth_str}' was removed"
+    elif diff_type == 'added':
+        result = f"Property '{depth_str}' was added with value: {val2}"
+    elif diff_type == 'equal':
+        result = None
+    elif diff_type == 'update':
+        result = f"Property '{depth_str}' was updated. From {val1} to {val2}"
+    return result
 
 
 def plain(diff: dict, depth: list = []):

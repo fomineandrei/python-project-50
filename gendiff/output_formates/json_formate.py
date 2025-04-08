@@ -19,13 +19,14 @@ def json_diff(diff: dict, key) -> dict:
     value2 = diff_val[1]
 
     if diff_type == 'deleted':
-        return {f'- {key}': value1}
-    if diff_type == 'added':
-        return {f'+ {key}': value2}
-    if diff_type == 'equal':
-        return {f'{key}': value1}
-    if diff_type == 'update':
-        return {f'- {key}': value1, f'+ {key}': value2}
+        result = {f'- {key}': value1}
+    elif diff_type == 'added':
+        result = {f'+ {key}': value2}
+    elif diff_type == 'equal':
+        result = {f'{key}': value1}
+    elif diff_type == 'update':
+        result = {f'- {key}': value1, f'+ {key}': value2}
+    return result
 
 
 def json_recursive(diff: dict) -> dict:

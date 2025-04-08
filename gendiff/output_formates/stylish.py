@@ -51,13 +51,14 @@ def stylish_diff(diff: dict, key, depth=None) -> str:
     value2 = stylish_vals[1]
 
     if diff_type == 'deleted':
-        return f'{indent}- {key}: {value1}'
-    if diff_type == 'added':
-        return f'{indent}+ {key}: {value2}'
-    if diff_type == 'equal':
-        return f'{indent}  {key}: {value1}'
-    if diff_type == 'update':
-        return f'{indent}- {key}: {value1}\n{indent}+ {key}: {value2}'
+        result = f'{indent}- {key}: {value1}'
+    elif diff_type == 'added':
+        result = f'{indent}+ {key}: {value2}'
+    elif diff_type == 'equal':
+        result = f'{indent}  {key}: {value1}'
+    elif diff_type == 'update':
+        result = f'{indent}- {key}: {value1}\n{indent}+ {key}: {value2}'
+    return result
 
 
 def stylish(diff: dict, depth: int = 0):

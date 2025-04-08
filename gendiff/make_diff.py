@@ -12,10 +12,9 @@ def node_diff(data1: dict, data2: dict, key) -> dict:
     """
     Return diff of node(key)
     formate of diff: {'diff': type, 'result': (val1, val2)}
-    'diff' choices: ['deleted', 'added', 'equal', 'update', 'nested']
-    'result' - tuple of two values of key in two dicts,
-            but for 'nested' 'result' is diff between this values
-
+    For type='nested' 'result' value is diff.
+    Valid values for 'diff' key:
+    'deleted', 'added', 'equal', 'update' or 'nested'.
     """
     value1 = data1.get(key, not_found)
     value2 = data2.get(key, not_found)
