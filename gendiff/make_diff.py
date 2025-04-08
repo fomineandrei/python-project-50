@@ -16,12 +16,12 @@ def node_diff(data1: dict, data2: dict, key) -> dict:
 
     if nested:
         return {key: {'diff': 'nested', 'result': make_diff(value1, value2)}}
-    
+
     deleted = type(value2) is NotFound
     added = type(value1) is NotFound
     equal = value1 == value2
     update = value1 != value2
-    
+
     if deleted:
         diff_type = 'deleted'
     elif added:
