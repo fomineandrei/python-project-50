@@ -1,61 +1,50 @@
-from gendiff.output_formates.functions import get_keys, is_diff
-from gendiff.node_diff import make_diff, NotFound
+from gendiff.functions import get_keys, make_dict
+from gendiff.make_diff import get_diff_type, get_diff_value
 import json as json_lib
 
 
-def make_dict(result: list) -> dict:
+def json_diff(diff: dict, key) -> dict:
     """
-    function for generate one dictionary from
-    list of dictionaries
+    Accepts diff and return diff between them
+    in json formate(string type), if diff_type
+    is 'nested' call json_recursive func for value
     """
-    result_dict = {}
-    for el in result:
-        result_dict.update(el)
-    return result_dict
+    diff_type = get_diff_type(diff, key)
+    diff_val = get_diff_value(diff, key)
 
+    if diff_type == 'nested':
+        return {key: json_recursive(diff_val)}
 
-def json_diff(dict1: dict, dict2: dict, key=None, depth=None) -> dict:
-    """Generate dict of differences between two dicts"""
-    diff = make_diff(dict1, dict2, key)
-    value1 = diff[0]
-    value2 = diff[1]
-    deleted = type(value2) is NotFound
-    if deleted:
+    value1 = diff_val[0]
+    value2 = diff_val[1]
+
+    if diff_type == 'deleted':
         return {f'- {key}': value1}
-    added = type(value1) is NotFound
-    if added:
+    if diff_type == 'added':
         return {f'+ {key}': value2}
-    equal = value1 == value2
-    if equal:
+    if diff_type == 'equal':
         return {f'{key}': value1}
-    update = value1 != value2
-    if update:
+    if diff_type == 'update':
         return {f'- {key}': value1, f'+ {key}': value2}
 
 
-def json_recursive(*args):
+def json_recursive(diff: dict) -> dict:
     """
     Check for diff every nodes of two dictionaries and
-    generate difference between them in python dictionary formate
+    generate diff between them in python dict formate
     """
-    keys = get_keys(*args)
-
-    def diff_func(*args, key):
-        if is_diff(*args, key=key):
-            return json_diff(*args, key)
-        return {key: json_recursive(*[arg.get(key) for arg in args])}
-
+    keys = get_keys(diff)
     result = list(map(
-        lambda key: diff_func(*args, key=key),
+        lambda key: json_diff(diff, key=key),
         keys)
     )
     return make_dict(result)
 
 
-def json(dict1: dict, dict2: dict) -> str:
+def json(diff: dict) -> str:
     """
     Accepts two Python dicts and return diff between them
     in json formate(string type)
     """
-    result = json_recursive(dict1, dict2)
+    result = json_recursive(diff)
     return json_lib.dumps(result, indent=4)

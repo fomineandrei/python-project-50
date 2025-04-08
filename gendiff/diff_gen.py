@@ -2,6 +2,7 @@ from gendiff.files_formates import file_to_dict
 from gendiff.cli import parse_func
 from gendiff.output_formates import OUTPUT_FORMATES
 from gendiff.exceptions import OutputFormateError
+from gendiff.make_diff import make_diff
 
 
 def generate_diff(first_file: str,
@@ -23,7 +24,8 @@ def generate_diff(first_file: str,
     output_formate_func = OUTPUT_FORMATES[format]
     dict1 = file_to_dict(first_file)
     dict2 = file_to_dict(second_file)
-    return output_formate_func(dict1, dict2)
+    diff = make_diff(dict1, dict2)
+    return output_formate_func(diff)
 
 
 def output_func():

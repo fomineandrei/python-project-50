@@ -1,10 +1,9 @@
-from gendiff.output_formates.functions import (
+from gendiff.functions import (
     for_specials_converter,
     flatten,
-    get_keys,
-    is_diff
+    get_keys
 )
-from gendiff.node_diff import make_diff, NotFound
+from gendiff.make_diff import get_diff_type, get_diff_value
 
 
 def python_to_plain(*args) -> list:
@@ -20,44 +19,42 @@ def python_to_plain(*args) -> list:
     return [for_specials_converter(val) for val in plain_values]
 
 
-def plain_diff(node1: dict, node2: dict, key=None, depth='') -> str:
+def plain_diff(diff: dict, key, depth: list = []) -> str:
     """
-    Accepts two Python dicts and return diff between them
-    in plain formate(string type)
+    Accepts diff and return diff between them
+    in plain formate(string type), if diff_type
+    is 'nested' call plain func for value
     """
-    diff = make_diff(node1, node2, key)
-    plain_values = python_to_plain(*diff)
-    value1 = plain_values[0]
-    value2 = plain_values[1]
-    deleted = type(value2) is NotFound
-    if deleted:
-        return f"Property '{depth}' was removed"
-    added = type(value1) is NotFound
-    if added:
-        return f"Property '{depth}' was added with value: {value2}"
-    equal = value1 == value2
-    if equal:
+    diff_type = get_diff_type(diff, key)
+    diff_val = get_diff_value(diff, key)
+
+    if diff_type == 'nested':
+        return plain(diff_val, depth)
+
+    depth_str = '.'.join(depth)
+    plain_vals = python_to_plain(
+        *diff_val)
+    value1 = plain_vals[0]
+    value2 = plain_vals[1]
+
+    if diff_type == 'deleted':
+        return f"Property '{depth_str}' was removed"
+    if diff_type == 'added':
+        return f"Property '{depth_str}' was added with value: {value2}"
+    if diff_type == 'equal':
         return
-    update = value1 != value2
-    if update:
-        return f"Property '{depth}' was updated. From {value1} to {value2}"
+    if diff_type == 'update':
+        return f"Property '{depth_str}' was updated. From {value1} to {value2}"
 
 
-def plain(*args, depth=''):
+def plain(diff: dict, depth: list = []):
     """
     Check for diff every nodes of two dictionaries and
-    generate difference between them in plain formate
+    generate diff between them in plain formate
     """
-    keys = get_keys(*args)
-
-    def diff_func(*args, key, depth=''):
-        depth = f'{depth}.{key}'.lstrip('.')
-        if is_diff(*args, key=key):
-            return plain_diff(*args, key, depth)
-        return plain(*[arg.get(key) for arg in args], depth=depth)
-
+    keys = get_keys(diff)
     result = list(map(
-        lambda key: diff_func(*args, key=key, depth=depth),
+        lambda key: plain_diff(diff, key=key, depth=depth + [key]),
         keys)
     )
     return '\n'.join(flatten([arg for arg in result if arg is not None]))

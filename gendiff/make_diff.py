@@ -1,4 +1,4 @@
-from gendiff.output_formates.functions import get_keys
+from gendiff.functions import get_keys, make_dict
 
 
 class NotFound():
@@ -8,44 +8,46 @@ class NotFound():
 not_found = NotFound()
 
 
-def make_dict(result: list) -> dict:
+def node_diff(data1: dict, data2: dict, key) -> dict:
     """
-    function for generate one dictionary from
-    list of dictionaries
+    Return diff of node(key)
+    formate of diff: {'diff': type, 'result': (val1, val2)}
+    'diff' choices: ['deleted', 'added', 'equal', 'update', 'nested']
+    'result' - tuple of two values of key in two dicts,
+            but for 'nested' 'result' is diff between this values
+
     """
-    result_dict = {}
-    for el in result:
-        result_dict.update(el)
-    return result_dict
+    value1 = data1.get(key, not_found)
+    value2 = data2.get(key, not_found)
+    nested = isinstance(value1, dict) and isinstance(value2, dict)
+    if nested:
+        return {key: {'diff': 'nested', 'result': make_diff(value1, value2)}}
+    deleted = type(value2) is NotFound
+    if deleted:
+        return {key: {'diff': 'deleted', 'result': (value1, value2)}}
+    added = type(value1) is NotFound
+    if added:
+        return {key: {'diff': 'added', 'result': (value1, value2)}}
+    equal = value1 == value2
+    if equal:
+        return {key: {'diff': 'equal', 'result': (value1, value2)}}
+    update = value1 != value2
+    if update:
+        return {key: {'diff': 'update', 'result': (value1, value2)}}
 
 
 def make_diff(data1_dict: dict, data2_dict: dict) -> dict:
     """Return python dict of differences between two dicts"""
     keys = get_keys(data1_dict, data2_dict)
-
-    def node_diff(data1, data2, key):
-        value1 = data1.get(key, not_found)
-        value2 = data2.get(key, not_found)
-        deleted = type(value2) is NotFound
-        if deleted:
-            return {'diff': 'deleted', 'result': {key: value1}}
-        added = type(value2) is NotFound
-        if added:
-            return {'diff': 'added', 'result': {key: value2}}
-        nested = isinstance(value1, dict) and isinstance(value2, dict)
-        if nested:
-            return {'diff': 'nested', 'result': {key: make_diff(value1, value2)}}
-        equal = value1 == value2
-        if equal:
-            return {'diff': 'equal', 'result': {key: value1}}
-        update = value1 != value2
-        if update:
-            return {'diff': 'update', 'result': {key: [value1, value2]}}
-        
     result = list(map(lambda key: node_diff(data1_dict, data2_dict, key), keys))
     return make_dict(result)
 
-        
+
+def get_diff_type(diff_node: dict, key) -> str:
+    """Return diff type from diff(result of make_diff func)"""
+    return diff_node[key]['diff']
 
 
-    
+def get_diff_value(diff_node: dict, key):
+    """Return diff value from diff(result of make_diff func)"""
+    return diff_node[key]['result']
